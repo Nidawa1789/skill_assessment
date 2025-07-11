@@ -1,0 +1,25 @@
+--- # Exercice 1
+- name: Configuration VLAN sur un switch Cisco
+  hosts: switches
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Créer VLAN de gestion
+      ios_config:
+        lines:
+          - name VLAN_GESTION
+        parents: vlan 10
+
+    - name: Configurer l’interface VLAN
+      ios_config:
+        lines:
+          - ip address 192.168.10.1 255.255.255.0
+          - no shutdown
+        parents: interface vlan 10
+
+    - name: Mettre l’interface Gig0/1 en trunk
+      ios_config:
+        lines:
+          - switchport mode trunk
+        parents: interface GigabitEthernet0/1
